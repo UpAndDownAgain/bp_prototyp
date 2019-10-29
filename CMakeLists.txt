@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.14)
+project(bp_prototyp)
+
+set(CMAKE_CXX_STANDARD 17)
+
+find_package(OpenCV REQUIRED)
+add_executable(bp_prototyp main.cpp classes/videoPlayer.cpp classes/videoPlayer.h)
+target_link_libraries(bp_prototyp ${OpenCV_LIBS} )
