@@ -24,7 +24,11 @@ void videoPlayer::playVideo(const std::string &windowName) {
         if(play || currentFrame == 0) { //video zacina zastavene
             videoCapture >> frame; //nacteni framu z video souboru
             currentFrame = (int)videoCapture.get(CV_CAP_PROP_POS_FRAMES);
-            if (frame.empty()) break; //konec video souboru
+            if (frame.empty()){
+                //loop video
+                videoCapture.set(CV_CAP_PROP_POS_FRAMES, 0);
+                continue;
+            }
             std::cout << "showing frame number" << currentFrame << std::endl;
             //detectAndDisplay(frame);
             display(frame, currentFrame);
