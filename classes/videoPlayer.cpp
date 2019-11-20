@@ -37,6 +37,7 @@ bool videoPlayer::openCascade(const std::string &cascadeName) {
 
 void videoPlayer::loadFrames() {
     cv::Mat frame;
+    std::cout << "loading frames" << std::endl;
     while (true) {
 
         videoCapture >> frame;
@@ -45,9 +46,12 @@ void videoPlayer::loadFrames() {
         else
             framesToProcess.push(frame.clone());
     }
+    std::cout << "frames loaded" << std::endl;
 }
 
 void videoPlayer::detectAndDisplay() {
+    std::cout << "detecting objects" << std::endl;
+
     cv::Mat frame;
     cv::Mat grayScale;
     std::vector<cv::Rect> detects;
