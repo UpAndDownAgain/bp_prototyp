@@ -4,6 +4,9 @@
 
 #include "videoPlayer.h"
 
+/*
+ * prehrani videa ze zpracovanych framu a vykresleni do okna
+ */
 void videoPlayer::playVideo(const std::string &windowName) {
     cv::namedWindow(windowName, cv::WINDOW_NORMAL); //vytvoreni okna pro video
     cv::resizeWindow(windowName, 600, 600);
@@ -20,13 +23,17 @@ void videoPlayer::playVideo(const std::string &windowName) {
     }
 
 }
-
+/*
+ * nacteni videa
+ */
 bool videoPlayer::openVideoFile(const std::string &fileName) {
     std::cout << "opening video file " << fileName << std::endl;
     videoCapture.open(fileName);
     return videoCapture.isOpened();
 }
-
+/*
+ * nacteni kaskady z xml
+ */
 bool videoPlayer::openCascade(const std::string &cascadeName) {
     if(!haarcascade.load(cascadeName)){
         std::cerr << "Error loading cascade" << std::endl;
@@ -34,7 +41,9 @@ bool videoPlayer::openCascade(const std::string &cascadeName) {
     }
     return true;
 }
-
+/*
+ * nahrani framu do fronty pro zpracovani
+ */
 void videoPlayer::loadFrames() {
     cv::Mat frame;
     std::cout << "loading frames" << std::endl;
@@ -49,27 +58,29 @@ void videoPlayer::loadFrames() {
     std::cout << "frames loaded" << std::endl;
 }
 
+/*
+ * zpracovani framu z fronty a vykresleni detekovanych objektu
+ */
 void videoPlayer::detectAndDisplay() {
     std::cout << "detecting objects" << std::endl;
 
     cv::Mat frame;
     cv::Mat grayScale;
     std::vector<cv::Rect> detects;
+
     while(!framesToProcess.empty()){
         frame = framesToProcess.front();
 
-        cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY);
+        cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY); //vytvoreni cernobileho framu z originalnu
         cv::equalizeHist(grayScale, grayScale);
-        haarcascade.detectMultiScale(grayScale, detects);
+        haarcascade.detectMultiScale(grayScale, detects); //detekce pomoci kaskady
 
+        //vykresleni ctvercu kolem detekovanych objektu
         for(auto &rect : detects ){
             cv::rectangle(frame, rect, cv::Scalar(0, 255, 0), 2);
         }
         processedFrames.push_back(frame);
         detects.clear();
         framesToProcess.pop();
-
     }
-
-
 }
