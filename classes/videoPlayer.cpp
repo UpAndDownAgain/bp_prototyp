@@ -3,46 +3,22 @@
 //
 
 #include "videoPlayer.h"
-videoPlayer::videoPlayer() {
-    play = false; //video zacina zastavene
-}
-
-videoPlayer::videoPlayer(const std::string &fileName) {
-    std::cout << "opening video file " << fileName << std::endl;
-    this->videoCapture.open(fileName);
-    videoPlayer();
-}
 
 void videoPlayer::playVideo(const std::string &windowName) {
     cv::namedWindow(windowName, cv::WINDOW_NORMAL); //vytvoreni okna pro video
     cv::resizeWindow(windowName, 600, 600);
-    auto fps = (double)videoCapture.get(CV_CAP_PROP_FPS);
-    int currentFrame = (int)videoCapture.get(CV_CAP_PROP_POS_FRAMES);
-    std::cout << "playing video" << std::endl;
 
+    std::cout << "end of video file" << std::endl;
     while(true){
-        if(play || currentFrame == 0) { //video zacina zastavene
-            videoCapture >> frame; //nacteni framu z video souboru
-            currentFrame = (int)videoCapture.get(CV_CAP_PROP_POS_FRAMES);
-            if (frame.empty()){
-                //loop video
-                videoCapture.set(CV_CAP_PROP_POS_FRAMES, 0);
-                continue;
+        for(auto &frame : processedFrames){
+            cv::imshow(windowName, frame);
+            int c = cv::waitKey(24);
+            if(c == 'q'){
+                return;
             }
-            std::cout << "showing frame number" << currentFrame << std::endl;
-            //detectAndDisplay(frame);
-            display(frame, currentFrame);
-            cv::imshow(windowName, frame); //zobrazeni framu v okne
-        }
-        char c = (char)cv::waitKey(fps);
-        if(c == 'p'){
-            play = !play;
-        }
-        else if(c == 'q'){
-            break;
         }
     }
-    std::cout << "end of video file" << std::endl;
+
 }
 
 bool videoPlayer::openVideoFile(const std::string &fileName) {
@@ -59,51 +35,37 @@ bool videoPlayer::openCascade(const std::string &cascadeName) {
     return true;
 }
 
-void videoPlayer::detectAndDisplay(cv::Mat &frame) {
-    cv::Mat frame_gray;
-    cv::cvtColor(frame, frame_gray, cv::COLOR_BGR2GRAY); //img na grayscale
-    cv::equalizeHist(frame_gray, frame_gray);
-
-    std::vector<cv::Rect> objects;
-    haarcascade.detectMultiScale(frame_gray, objects);
-    std::cout << "Objects detected " << objects.size() << std::endl;
-
-    for(size_t i = 0; i < objects.size(); ++i){
-        cv::rectangle(frame, objects[i], cv::Scalar(0,255,0), 2);
-    }
-}
-
-void videoPlayer::detect(){
+void videoPlayer::loadFrames() {
     cv::Mat frame;
-    cv::Mat frame_gray;
-    double currentFrame;
-    std::vector<cv::Rect> detects;
-
-    while(true){
+    while (true) {
 
         videoCapture >> frame;
-        if(frame.empty())
+        if (frame.empty())
             break;
-        currentFrame = videoCapture.get(CV_CAP_PROP_POS_FRAMES);
+        else
+            framesToProcess.push(frame.clone());
+    }
+}
 
-        cv::cvtColor(frame, frame_gray, cv::COLOR_BGR2GRAY);
-        cv::equalizeHist(frame_gray, frame_gray);
-        std::cout << "detecting frame " << currentFrame << std::endl;
-        haarcascade.detectMultiScale(frame_gray, detects);
+void videoPlayer::detectAndDisplay() {
+    cv::Mat frame;
+    cv::Mat grayScale;
+    std::vector<cv::Rect> detects;
+    while(!framesToProcess.empty()){
+        frame = framesToProcess.front();
 
-        for(const auto &item : detects){ //ulozi detekce to object_vect s cislem framu ve kterem se vyskytuje pro pozdejsi vykresleni
-            object_vect.emplace_back( std::pair<int,cv::Rect>(currentFrame, item) );
+        cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY);
+        cv::equalizeHist(grayScale, grayScale);
+        haarcascade.detectMultiScale(grayScale, detects);
+
+        for(auto &rect : detects ){
+            cv::rectangle(frame, rect, cv::Scalar(0, 255, 0), 2);
         }
+        processedFrames.push_back(frame);
         detects.clear();
-    }
-    videoCapture.set(CV_CAP_PROP_POS_FRAMES, 0);
-}
+        framesToProcess.pop();
 
-void videoPlayer::display(cv::Mat &frame, int frame_number) {
-    for(size_t i = 0; i < object_vect.size(); ++i){
-        if(object_vect[i].first == frame_number){
-            cv::rectangle(frame, object_vect[i].second, cv::Scalar(0,255,0), 2);
-        }
     }
-}
 
+
+}

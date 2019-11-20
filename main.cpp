@@ -17,7 +17,8 @@ int main(int argc, char **argv) {
         std::cerr << "error opening video" << std::endl;
         return -1;
     }
-    vp.detect();
+    vp.loadFrames();
+    vp.detectAndDisplay();
     vp.playVideo("video player");
     return 0;
 }

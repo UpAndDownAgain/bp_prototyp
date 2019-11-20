@@ -13,26 +13,24 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <string>
 #include <iostream>
+#include <thread>
+#include <queue>
 
 class videoPlayer {
 public:
-    videoPlayer();
-    videoPlayer(const std::string &fileName);
-
     void playVideo(const std::string &windowName );
     bool openVideoFile(const std::string &fileName);
     bool openCascade(const std::string &cascadeName);
-    void detect();
+    void loadFrames();
+    void detectAndDisplay();
 
 private:
     cv::CascadeClassifier haarcascade;
     cv::VideoCapture videoCapture;
-    cv::Mat frame;
-    bool play;
     std::vector<std::pair<int, cv::Rect>> object_vect;
+    std::vector<cv::Mat> processedFrames;
+    std::queue<cv::Mat> framesToProcess;
 
-    void display(cv::Mat &frame, int frame_number);
-    void detectAndDisplay(cv::Mat &frame);
 };
 
 
