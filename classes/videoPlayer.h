@@ -6,7 +6,7 @@
 #define BP_PROTOTYP_VIDEOPLAYER_H
 
 
-#include <highgui.h>
+#include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
