@@ -5,6 +5,7 @@ int main(int argc, char **argv) {
     videoPlayer vp;
     std::string fName;
 
+
     if(argc < 3){
         std::cout << "file name please" << std::endl;
         std::cin >> fName;

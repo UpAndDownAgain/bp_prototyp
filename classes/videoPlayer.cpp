@@ -8,10 +8,9 @@
  * prehrani videa ze zpracovanych framu a vykresleni do okna
  */
 void videoPlayer::playVideo(const std::string &windowName) {
-    cv::namedWindow(windowName, cv::WINDOW_NORMAL); //vytvoreni okna pro video
+    cv::namedWindow(windowName, cv::WINDOW_NORMAL);
     cv::resizeWindow(windowName, 600, 600);
 
-    std::cout << "end of video file" << std::endl;
     while(true){
         for(auto &frame : processedFrames){
             cv::imshow(windowName, frame);
@@ -70,11 +69,13 @@ void videoPlayer::detectAndDisplay() {
 
     while(!framesToProcess.empty()){
         frame = framesToProcess.front();
-
-        cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY); //vytvoreni cernobileho framu z originalnu
+        //vytvoreni cernobileho framu z originalnu
+        cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY); 
+        //vyrovnání histogramu
         cv::equalizeHist(grayScale, grayScale);
-        haarcascade.detectMultiScale(grayScale, detects); //detekce pomoci kaskady
-
+        //detekce pomoci kaskady
+        haarcascade.detectMultiScale(grayScale, detects); 
+        cv::groupRectangles(detects, 2, 0.67);
         //vykresleni ctvercu kolem detekovanych objektu
         for(auto &rect : detects ){
             cv::rectangle(frame, rect, cv::Scalar(0, 255, 0), 2);
