@@ -12,7 +12,7 @@
 class DetectorFactory {
 public:
     DetectorFactory() = default;
-    std::unique_ptr<Detector> createDetector(const std::string &file);
+    static std::unique_ptr<Detector> createDetector(const std::string &file);
 };
 
 

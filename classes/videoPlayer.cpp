@@ -56,11 +56,13 @@ VideoPlayer::VideoPlayer(const std::string &videoFile, const std::string &detect
  * framu, ktery ulozi pro prehrani
  */
 void VideoPlayer::detectAndDisplay() {
+    int i=0;
     while(!framesToProcess.empty()){
+        std::cout << "detecting frame " << i++ << std::endl;
         cv::Mat frame = framesToProcess.front();
         framesToProcess.pop();
         std::vector<cv::Rect> detects = detector->detect(frame);
-        for(const auto obj : detects){
+        for(const auto &obj : detects){
             cv::rectangle(frame, obj, cv::Scalar(0,255,0));
         }
         processedFrames.push_back(frame);

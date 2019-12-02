@@ -6,7 +6,7 @@
 
 cv::Mat CascadeDetector::preprocess(cv::Mat &frame) {
     cv::Mat grayscale;
-    cv::cvtColor(frame, grayscale, cv::COLOR_BayerBG2GRAY);
+    cv::cvtColor(frame, grayscale, cv::COLOR_BGR2GRAY);
     cv::equalizeHist(grayscale, grayscale);
     return grayscale;
 }

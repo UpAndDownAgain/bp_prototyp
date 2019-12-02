@@ -13,7 +13,7 @@
 
 class Detector {
 public:
-    virtual std::vector<cv::Rect> detect(cv::Mat &frame);
+    virtual std::vector<cv::Rect> detect(cv::Mat &frame) = 0;
 };
 
 

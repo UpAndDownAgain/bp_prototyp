@@ -3,10 +3,6 @@
 
 int main(int argc, char **argv) {
 
-    cv::CommandLineParser parser(argc, argv,
-            "{-video||path to video file}"
-                     "{-detect||path to cascade or weights file");
-
     if(argc < 3 ){
         std::cerr << "no arguments" << std::endl;
         return -1;
@@ -14,14 +10,14 @@ int main(int argc, char **argv) {
 
     VideoPlayer *vp;
     try{
-        vp = new VideoPlayer(parser.get<std::string>("-video"),
-                parser.get<std::string>("-detect") );
+        vp = new VideoPlayer( argv[1],argv[2] );
     }catch(std::exception &e){
         std::cerr << e.what() << std::endl;
         return -1;
     }
 
     vp->loadFrames();
+    std::cout << "frames loaded\ndetecting" << std::endl;
     vp->detectAndDisplay();
     vp->playVideo("video player");
     return 0;
