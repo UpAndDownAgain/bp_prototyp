@@ -24,7 +24,6 @@ public:
     void detectAndDisplay();
 
 private:
-    DetectorFactory detectorFactory;
     std::unique_ptr<Detector> detector;
     cv::VideoCapture videoCapture;
 

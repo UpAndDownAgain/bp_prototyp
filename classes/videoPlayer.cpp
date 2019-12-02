@@ -42,7 +42,7 @@ void VideoPlayer::loadFrames() {
 
 VideoPlayer::VideoPlayer(const std::string &videoFile, const std::string &detectorFile) {
     try{
-    detector = detectorFactory.createDetector(detectorFile);
+    detector = DetectorFactory::createDetector(detectorFile);
     videoCapture.open(videoFile);
     }catch(std::exception &e){
         throw e;
