@@ -6,7 +6,6 @@
 #define BP_PROTOTYP_VIDEOPLAYER_H
 
 
-#include <highgui.h>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -14,21 +13,21 @@
 #include <opencv2/objdetect/objdetect.hpp>
 #include <string>
 #include <iostream>
-#include <thread>
 #include <queue>
+#include "DetectorFactory.h"
 
-class videoPlayer {
+class VideoPlayer {
 public:
+    VideoPlayer(const std::string &videoFile, const std::string &detectorFile);
     void playVideo(const std::string &windowName );
     bool openVideoFile(const std::string &fileName);
-    bool openCascade(const std::string &cascadeName);
     void loadFrames();
-    void detectAndDisplay();
 
 private:
-    cv::CascadeClassifier haarcascade;
+    DetectorFactory detectorFactory;
+    std::unique_ptr<Detector> detector;
     cv::VideoCapture videoCapture;
-    std::vector<std::pair<int, cv::Rect>> object_vect;
+
     std::vector<cv::Mat> processedFrames;
     std::queue<cv::Mat> framesToProcess;
 
