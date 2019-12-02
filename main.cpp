@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
     }
 
     vp->loadFrames();
-
+    vp->detectAndDisplay();
     vp->playVideo("video player");
     return 0;
 }

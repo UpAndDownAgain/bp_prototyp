@@ -20,8 +20,8 @@ class VideoPlayer {
 public:
     VideoPlayer(const std::string &videoFile, const std::string &detectorFile);
     void playVideo(const std::string &windowName );
-    bool openVideoFile(const std::string &fileName);
     void loadFrames();
+    void detectAndDisplay();
 
 private:
     DetectorFactory detectorFactory;

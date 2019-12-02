@@ -51,3 +51,18 @@ VideoPlayer::VideoPlayer(const std::string &videoFile, const std::string &detect
         throw std::invalid_argument("Failed to open video file");
     }
 }
+/**
+ * nacte framy z fronty preda je detectoru k detekci a vysledek zakresli do origin
+ * framu, ktery ulozi pro prehrani
+ */
+void VideoPlayer::detectAndDisplay() {
+    while(!framesToProcess.empty()){
+        cv::Mat frame = framesToProcess.front();
+        framesToProcess.pop();
+        std::vector<cv::Rect> detects = detector->detect(frame);
+        for(const auto obj : detects){
+            cv::rectangle(frame, obj, cv::Scalar(0,255,0));
+        }
+        processedFrames.push_back(frame);
+    }
+}
