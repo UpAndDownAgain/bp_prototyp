@@ -16,7 +16,7 @@ private:
     cv::Mat preprocess(cv::Mat &frame);
 public:
     explicit CascadeDetector(const std::string &cascadeName);
-    std::vector<cv::Rect> detect(cv::Mat &frame) override;
+    void detectAndDisplay(cv::Mat &frame) override;
 };
 
 

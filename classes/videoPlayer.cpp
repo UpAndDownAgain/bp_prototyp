@@ -61,10 +61,7 @@ void VideoPlayer::detectAndDisplay() {
         std::cout << "detecting frame " << i++ << std::endl;
         cv::Mat frame = framesToProcess.front();
         framesToProcess.pop();
-        std::vector<cv::Rect> detects = detector->detect(frame);
-        for(const auto &obj : detects){
-            cv::rectangle(frame, obj, cv::Scalar(0,255,0));
-        }
+        detector->detectAndDisplay(frame);
         processedFrames.push_back(frame);
     }
 }

@@ -17,7 +17,7 @@ CascadeDetector::CascadeDetector(const std::string &cascadeName) {
     }
 }
 
-std::vector<cv::Rect> CascadeDetector::detect(cv::Mat &frame) {
+void CascadeDetector::detectAndDisplay(cv::Mat &frame) {
     if(cascade.empty()){
         throw std::invalid_argument("cascade not loaded");
     }
@@ -25,5 +25,8 @@ std::vector<cv::Rect> CascadeDetector::detect(cv::Mat &frame) {
     cv::Mat image = this->preprocess(frame);
     std::vector<cv::Rect> detects;
     cascade.detectMultiScale(frame, detects);
-    return detects;
+
+    for(const auto &obj : detects){
+        cv::rectangle(frame, obj, cv::Scalar(0,255,0));
+    }
 }
