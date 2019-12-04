@@ -21,7 +21,7 @@ public:
     VideoPlayer(const std::string &videoFile, const std::string &detectorFile);
     void playVideo(const std::string &windowName );
     void loadFrames();
-    void detectAndDisplay();
+    void useDetector();
 
 private:
     std::unique_ptr<Detector> detector;

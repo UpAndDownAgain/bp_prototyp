@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
     vp->loadFrames();
     std::cout << "frames loaded\ndetecting" << std::endl;
-    vp->detectAndDisplay();
+    vp->useDetector();
     vp->playVideo("video player");
     return 0;
 }

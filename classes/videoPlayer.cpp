@@ -63,7 +63,7 @@ VideoPlayer::VideoPlayer(const std::string &videoFile, const std::string &detect
  * nacte framy z fronty preda je detectoru k detekci a vysledek zakresli do origin
  * framu, ktery ulozi pro prehrani
  */
-void VideoPlayer::detectAndDisplay() {
+void VideoPlayer::useDetector() {
     int i=0;
     while(!framesToProcess.empty()){
         std::cout << "detecting frame " << i++ << std::endl;
