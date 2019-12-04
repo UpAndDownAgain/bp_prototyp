@@ -28,14 +28,22 @@ void VideoPlayer::playVideo(const std::string &windowName) {
  */
 void VideoPlayer::loadFrames() {
     cv::Mat frame;
+    double scale;
     std::cout << "loading frames" << std::endl;
     while (true) {
 
         videoCapture >> frame;
         if (frame.empty())
             break;
-        else
+        else {
+
+            scale = 640.0 / frame.size().height;
+            std::cout << frame.size().width << " x " << frame.size().height;
+            std::cout << scale << std::endl;
+            cv::resize(frame, frame, cv::Size(), scale, scale, CV_INTER_AREA);
+            std::cout << frame.size().width << " x " << frame.size().height << std::endl;
             framesToProcess.push(frame.clone());
+        }
     }
     std::cout << "frames loaded" << std::endl;
 }
