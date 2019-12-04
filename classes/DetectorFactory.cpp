@@ -4,6 +4,7 @@
 
 #include "DetectorFactory.h"
 #include "CascadeDetector.h"
+#include "YoloDetector.h"
 #include <experimental/filesystem>
 #include <memory>
 
@@ -14,7 +15,8 @@ std::unique_ptr<Detector> DetectorFactory::createDetector(const std::string &fil
         detector = std::make_unique<CascadeDetector>(file);
     }
     else if(extension == ".weights"){
-        //TODO
+        std::string config = "../config/yolov3_custom.cfg";
+        detector = std::make_unique<YoloDetector>(config, file);
     }else{
         throw std::invalid_argument("cannot resolve file");
     }

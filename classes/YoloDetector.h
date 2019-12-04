@@ -11,7 +11,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 //TODO
-class YoloDetector : Detector {
+class YoloDetector : public Detector {
 private:
 
     double threshold = 0.5;
@@ -21,7 +21,7 @@ private:
     void drawPrediction(float &d, int x, int y, int i, int i1, cv::Mat &mat);
 
 public:
-    YoloDetector(std::string &cfg, std::string &weights);
+    explicit YoloDetector(std::string &cfg,const std::string &weights);
     void detectAndDisplay(cv::Mat &frame) override;
 
 };

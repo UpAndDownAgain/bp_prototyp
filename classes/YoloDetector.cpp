@@ -4,7 +4,7 @@
 
 #include "YoloDetector.h"
 
-YoloDetector::YoloDetector(std::string &cfg, std::string &weights) {
+YoloDetector::YoloDetector(std::string &cfg,const std::string &weights) {
     this->net = cv::dnn::readNetFromDarknet(cfg, weights);
     this->net.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
     this->net.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);

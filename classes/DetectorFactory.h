@@ -8,12 +8,16 @@
 
 #include "Detector.h"
 #include <memory>
+#include <exception>
 
 class DetectorFactory {
+private:
+
 public:
     DetectorFactory() = default;
     static std::unique_ptr<Detector> createDetector(const std::string &file);
+
 };
 
 
-#endif //BP_PROTOTYP_DETECTORFACTORY_H
+#endif //BP
