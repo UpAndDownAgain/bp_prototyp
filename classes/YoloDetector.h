@@ -7,10 +7,13 @@
 
 
 #include "Detector.h"
+#include <opencv2/dnn.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
 //TODO
 class YoloDetector : Detector {
 private:
-
+    cv::dnn::Net net;
 
 public:
     YoloDetector(std::string &cfg, std::string &weights, std::string &classes);
