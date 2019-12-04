@@ -7,11 +7,10 @@
 /*
  * prehrani videa ze zpracovanych framu a vykresleni do okna
  */
-void videoPlayer::playVideo(const std::string &windowName) {
-    cv::namedWindow(windowName, cv::WINDOW_NORMAL); //vytvoreni okna pro video
+void VideoPlayer::playVideo(const std::string &windowName) {
+    cv::namedWindow(windowName, cv::WINDOW_NORMAL);
     cv::resizeWindow(windowName, 600, 600);
 
-    std::cout << "end of video file" << std::endl;
     while(true){
         for(auto &frame : processedFrames){
             cv::imshow(windowName, frame);
@@ -23,28 +22,11 @@ void videoPlayer::playVideo(const std::string &windowName) {
     }
 
 }
-/*
- * nacteni videa
- */
-bool videoPlayer::openVideoFile(const std::string &fileName) {
-    std::cout << "opening video file " << fileName << std::endl;
-    videoCapture.open(fileName);
-    return videoCapture.isOpened();
-}
-/*
- * nacteni kaskady z xml
- */
-bool videoPlayer::openCascade(const std::string &cascadeName) {
-    if(!haarcascade.load(cascadeName)){
-        std::cerr << "Error loading cascade" << std::endl;
-        return false;
-    }
-    return true;
-}
+
 /*
  * nahrani framu do fronty pro zpracovani
  */
-void videoPlayer::loadFrames() {
+void VideoPlayer::loadFrames() {
     cv::Mat frame;
     std::cout << "loading frames" << std::endl;
     while (true) {
@@ -58,29 +40,31 @@ void videoPlayer::loadFrames() {
     std::cout << "frames loaded" << std::endl;
 }
 
-/*
- * zpracovani framu z fronty a vykresleni detekovanych objektu
+VideoPlayer::VideoPlayer(const std::string &videoFile, const std::string &detectorFile) {
+    try{
+        detector = DetectorFactory::createDetector(detectorFile); //vytvori tridu pro detektor v zavisloti na dodanem souboru
+        videoCapture.open(videoFile);
+    }catch(std::exception &e){
+        throw e;
+    }
+    if(!videoCapture.isOpened()){
+        throw std::invalid_argument("Failed to open video file");
+    }
+}
+/**
+ * nacte framy z fronty preda je detectoru k detekci a vysledek zakresli do origin
+ * framu, ktery ulozi pro prehrani
  */
-void videoPlayer::detectAndDisplay() {
-    std::cout << "detecting objects" << std::endl;
-
-    cv::Mat frame;
-    cv::Mat grayScale;
-    std::vector<cv::Rect> detects;
-
+void VideoPlayer::detectAndDisplay() {
+    int i=0;
     while(!framesToProcess.empty()){
-        frame = framesToProcess.front();
-
-        cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY); //vytvoreni cernobileho framu z originalnu
-        cv::equalizeHist(grayScale, grayScale);
-        haarcascade.detectMultiScale(grayScale, detects); //detekce pomoci kaskady
-
-        //vykresleni ctvercu kolem detekovanych objektu
-        for(auto &rect : detects ){
-            cv::rectangle(frame, rect, cv::Scalar(0, 255, 0), 2);
+        std::cout << "detecting frame " << i++ << std::endl;
+        cv::Mat frame = framesToProcess.front();
+        framesToProcess.pop();
+        std::vector<cv::Rect> detects = detector->detect(frame);
+        for(const auto &obj : detects){
+            cv::rectangle(frame, obj, cv::Scalar(0,255,0));
         }
         processedFrames.push_back(frame);
-        detects.clear();
-        framesToProcess.pop();
     }
 }
