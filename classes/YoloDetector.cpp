@@ -112,7 +112,7 @@ void YoloDetector::drawPred(int classId, float confidence, int left, int top, in
     top = cv::max(top, labelSize.height);
 
     for(size_t i = 1; i < barpath.size(); ++i){
-        cv::line(frame,barpath[i-1], barpath[i], cv::Scalar(215,66,245), 4);//r245, g66, b215
+        cv::line(frame,barpath[i-1], barpath[i], cv::Scalar(255,255,0), 4);
     }
     cv::rectangle(frame, cv::Point(left, top), cv::Point(right,bottom), cv::Scalar(0,255,0), 3);
 
