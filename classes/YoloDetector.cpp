@@ -23,7 +23,7 @@ void YoloDetector::detectAndDisplay(cv::Mat &frame) {
     net.setInput(blob);
     net.forward(outputs, outNames);
 
-    std::cout << outputs.size() << " detect " <<  std::endl;
+    //std::cout << outputs.size() << " detect " <<  std::endl;
     postprocess(frame, outputs);
 }
 
