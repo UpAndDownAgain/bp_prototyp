@@ -100,7 +100,7 @@ void YoloDetector::postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect) {
 }
 
 void YoloDetector::drawPred(int classId, float confidence, int left, int top, int right, int bottom, cv::Mat &frame) {
-    cv::rectangle(frame, cv::Point(left, top), cv::Point(right,bottom), cv::Scalar(0,255,0));
+    cv::rectangle(frame, cv::Point(left, top), cv::Point(right,bottom), cv::Scalar(0,255,0), 3);
     std::string label = cv::format("%.2f", confidence);
     int baseline;
     cv::Size labelSize = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);
