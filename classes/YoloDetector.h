@@ -20,6 +20,8 @@ private:
     double nmsThreshold = 0.4;
     cv::dnn::Net net;
     std::vector<cv::String> outNames;
+    std::vector<cv::Point> barpath;
+
     void postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect);
     void drawPred(int classId, float confidence, int left, int top, int right, int bottom, cv::Mat &frame);
 
