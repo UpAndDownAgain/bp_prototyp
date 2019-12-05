@@ -13,7 +13,7 @@ class CascadeDetector : public Detector {
 private:
     cv::CascadeClassifier cascade;
 
-    cv::Mat preprocess(cv::Mat &frame);
+    static cv::Mat preprocess(cv::Mat &frame);
 public:
     explicit CascadeDetector(const std::string &cascadeName);
     void detectAndDisplay(cv::Mat &frame) override;

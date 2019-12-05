@@ -70,7 +70,7 @@ void YoloDetector::postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect) {
                 cv::Mat scores = i.row(j).colRange(5, i.cols);
                 cv::Point classIdPoint;
                 double confidence;
-                cv::minMaxLoc(scores, 0, &confidence, 0, &classIdPoint);
+                cv::minMaxLoc(scores, nullptr, &confidence, nullptr, &classIdPoint);
 
                 if(confidence > threshold){
                     int centerX = (int)(data[0] * frame.cols);

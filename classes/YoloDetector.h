@@ -24,7 +24,7 @@ private:
 
     void postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect);
     void drawPred(int classId, float confidence, int left, int top, int right, int bottom, cv::Mat &frame);
-    void keepClosestDetection(std::vector<cv::Rect> &boxes, std::vector<int> &indices);
+    static void keepClosestDetection(std::vector<cv::Rect> &boxes, std::vector<int> &indices);
 
 public:
     explicit YoloDetector(std::string &cfg,const std::string &weights);
