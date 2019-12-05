@@ -36,12 +36,9 @@ void VideoPlayer::loadFrames() {
         if (frame.empty())
             break;
         else {
-
             scale = 640.0 / frame.size().height;
-            std::cout << frame.size().width << " x " << frame.size().height;
-            std::cout << scale << std::endl;
             cv::resize(frame, frame, cv::Size(), scale, scale, CV_INTER_AREA);
-            std::cout << frame.size().width << " x " << frame.size().height << std::endl;
+            //std::cout << frame.size().width << " x " << frame.size().height << std::endl;
             framesToProcess.push(frame.clone());
         }
     }

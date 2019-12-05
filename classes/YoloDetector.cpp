@@ -93,6 +93,8 @@ void YoloDetector::postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect) {
     std::vector<int> indices;
     cv::dnn::NMSBoxes(boxes, confidences, threshold, nmsThreshold, indices);
 
+    keepClosestDetection(boxes, indices);
+
     for(int idx : indices){
         cv::Rect box = boxes[idx];
         barpath.emplace_back(cv::Point(box.x + (box.width / 2), box.y + (box.height / 2)));
@@ -109,8 +111,8 @@ void YoloDetector::drawPred(int classId, float confidence, int left, int top, in
 
     top = cv::max(top, labelSize.height);
 
-    for(auto &i : barpath){
-        cv::line(frame, i, i, cv::Scalar(0,0,255), 4);
+    for(size_t i = 1; i < barpath.size(); ++i){
+        cv::line(frame,barpath[i-1], barpath[i], cv::Scalar(215,66,245), 4);//r245, g66, b215
     }
     cv::rectangle(frame, cv::Point(left, top), cv::Point(right,bottom), cv::Scalar(0,255,0), 3);
 
@@ -119,5 +121,22 @@ void YoloDetector::drawPred(int classId, float confidence, int left, int top, in
             cv::Scalar::all(255), cv::FILLED);
 
     cv::putText(frame, label, cv::Point(left, top), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar());
+}
+
+void YoloDetector::keepClosestDetection(std::vector<cv::Rect> &boxes, std::vector<int> &indices) {
+    int biggestArea = -1;
+    int biggestAreaIndex = -1;
+
+    for(auto i : indices){
+        int boxArea = boxes[i].width * boxes[i].height;
+        if( boxArea> biggestArea){
+            biggestArea = boxArea;
+            biggestAreaIndex = i;
+        }
+    }
+    if(biggestAreaIndex != -1){
+        indices.clear();
+        indices.emplace_back(biggestAreaIndex);
+    }
 }
 
