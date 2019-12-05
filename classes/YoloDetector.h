@@ -10,15 +10,19 @@
 #include <opencv2/dnn.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/cvstd.hpp>
+#include <opencv2/core.hpp>
 //TODO
 class YoloDetector : public Detector {
 private:
-
     double threshold = 0.5;
     double nmsThreshold = 0.4;
     cv::dnn::Net net;
+    std::vector<cv::String> outNames;
     void postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect);
-    void drawPrediction(float &d, int x, int y, int i, int i1, cv::Mat &mat);
+    void drawPred(int classId, float confidence, int left, int top, int right, int bottom, cv::Mat &frame);
+
 
 public:
     explicit YoloDetector(std::string &cfg,const std::string &weights);
