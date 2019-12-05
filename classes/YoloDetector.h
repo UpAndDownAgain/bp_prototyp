@@ -14,8 +14,8 @@
 class YoloDetector : public Detector {
 private:
 
-    double threshold = 0.0;
-    double nmsThreshold = 0.0;
+    double threshold = 0.5;
+    double nmsThreshold = 0.4;
     cv::dnn::Net net;
     void postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect);
     void drawPrediction(float &d, int x, int y, int i, int i1, cv::Mat &mat);

@@ -38,8 +38,7 @@ void YoloDetector::postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect) {
             cv::Mat scores = i.row(j).colRange(5, i.cols);
             cv::minMaxLoc(scores, 0, &confidence, 0);
 
-            //if(confidence > this->threshold){
-            if(true){
+            if(confidence > this->threshold){
                 int centerX = (int)(data[0] * frame.cols);
                 int centerY = (int)(data[1] * frame.rows);
                 int width = (int)(data[2] * frame.cols);
