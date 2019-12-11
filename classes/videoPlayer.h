@@ -22,10 +22,13 @@ public:
     void playVideo(const std::string &windowName );
     void loadFrames();
     void useDetector();
-
+    void save(std::string &outName);
+    ~VideoPlayer();
 private:
     std::unique_ptr<Detector> detector;
     cv::VideoCapture videoCapture;
+
+    double fps, frame_width, frame_height;
 
     std::vector<cv::Mat> processedFrames;
     std::queue<cv::Mat> framesToProcess;
