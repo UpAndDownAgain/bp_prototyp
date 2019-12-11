@@ -9,6 +9,14 @@ int main(int argc, char **argv) {
     }
 
     VideoPlayer *vp;
+    std::string outFile;
+
+    if(argc == 4){
+        outFile = argv[3];
+    }else{
+        outFile = "output";
+    }
+
     try{
         vp = new VideoPlayer( argv[1],argv[2] );
     }catch(std::exception &e){
@@ -20,5 +28,6 @@ int main(int argc, char **argv) {
     std::cout << "frames loaded\ndetecting" << std::endl;
     vp->useDetector();
     vp->playVideo("video player");
+    vp->save(outFile);
     return 0;
 }

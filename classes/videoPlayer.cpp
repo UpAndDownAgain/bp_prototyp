@@ -49,6 +49,7 @@ VideoPlayer::VideoPlayer(const std::string &videoFile, const std::string &detect
     try{
         detector = DetectorFactory::createDetector(detectorFile); //vytvori tridu pro detektor v zavisloti na dodanem souboru
         videoCapture.open(videoFile);
+        fps = videoCapture.get(CV_CAP_PROP_FPS);
     }catch(std::exception &e){
         throw e;
     }
@@ -65,8 +66,34 @@ void VideoPlayer::useDetector() {
     while(!framesToProcess.empty()){
         std::cout << "detecting frame " << i++ << std::endl;
         cv::Mat frame = framesToProcess.front();
+
         framesToProcess.pop();
         detector->detectAndDisplay(frame);
         processedFrames.push_back(frame);
     }
+}
+/**
+ * ulozi video s detekci do souboru
+ * @param outName jmeno vystupu
+ */
+void VideoPlayer::save(std::string &outName) {
+    if(processedFrames.empty()){
+        std::cerr << "Nothing to save" << std::endl;
+        return;
+    }
+    cv::VideoWriter videoWriter(outName+".avi", CV_FOURCC('M', 'J', 'P', 'G'),
+            fps,cv::Size(processedFrames[0].size()));
+    size_t cntr = 0;
+    for(auto &frame : processedFrames){
+        videoWriter.write(frame);
+        ++cntr;
+    }
+    std::cout << cntr << " frames written into " << outName << std::endl;
+    videoWriter.release();
+}
+
+VideoPlayer::~VideoPlayer() {
+    videoCapture.release();
+    detector.release();
+    cv::destroyAllWindows();
 }
