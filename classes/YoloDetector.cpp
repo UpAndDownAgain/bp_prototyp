@@ -27,7 +27,7 @@ void YoloDetector::detectAndDisplay(cv::Mat &frame) {
     cv::dnn::blobFromImage(frame, blob, 1/255.0,
             cv::Size(480,480),
             cv::Scalar(0,0,0),
-            true, false), CV_8U;
+            true, false);
 
     //spusteni modelu
     net.setInput(blob);
