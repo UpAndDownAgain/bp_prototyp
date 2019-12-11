@@ -92,6 +92,7 @@ void VideoPlayer::save(std::string &outName) {
     videoWriter.release();
 }
 
+
 VideoPlayer::~VideoPlayer() {
     videoCapture.release();
     detector.release();
