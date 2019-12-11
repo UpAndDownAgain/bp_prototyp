@@ -25,7 +25,7 @@ void YoloDetector::detectAndDisplay(cv::Mat &frame) {
     //predpracovani snimku k detekci
     //vytvoreni 4D blobu ze snimku
     cv::dnn::blobFromImage(frame, blob, 1/255.0,
-            cv::Size(480,480),
+            cv::Size(416,416),
             cv::Scalar(0,0,0),
             true, false);
 
