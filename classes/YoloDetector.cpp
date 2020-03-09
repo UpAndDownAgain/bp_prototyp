@@ -25,9 +25,9 @@ void YoloDetector::detectAndDisplay(cv::Mat &frame) {
     //predpracovani snimku k detekci
     //vytvoreni 4D blobu ze snimku
     cv::dnn::blobFromImage(frame, blob, 1/255.0,
-            cv::Size(480,480),
+            cv::Size(416,416),
             cv::Scalar(0,0,0),
-            true, false), CV_8U;
+            true, false);
 
     //spusteni modelu
     net.setInput(blob);
@@ -114,9 +114,9 @@ void YoloDetector::postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect) {
 
     for(int idx : indices){
         cv::Rect box = boxes[idx];
-        barpath.emplace_back(cv::Point(box.x + (box.width / 2), box.y + (box.height / 2)));
-        drawPred(classIds[idx], confidences[idx],
-                 box.x, box.y, box.x + box.width, box.y + box.height, frame);
+        barPath.emplace_back(cv::Point(box.x + (box.width / 2), box.y + (box.height / 2)));
+        drawPred(classIds[idx], confidences[idx], box,
+                 /*box.x, box.y, box.x + box.width, box.y + box.height,*/ frame);
     }
 }
 /**
@@ -130,24 +130,26 @@ void YoloDetector::postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect) {
  * @param bottom
  * @param frame
  */
-void YoloDetector::drawPred(int classId, float confidence, int left, int top, int right, int bottom, cv::Mat &frame) {
+void YoloDetector::drawPred(int classId, float confidence, cv::Rect &box, /*int left, int top, int right, int bottom,*/ cv::Mat &frame) {
     std::string label = cv::format("%.2f", confidence);
     int baseline;
+    //cv::Rect2d box(cv::Point(left, top), cv::Point(right, bottom));
 
     cv::Size labelSize = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseline);
 
-    top = cv::max(top, labelSize.height);
+    int top = cv::max(box.y, labelSize.height);
 
-    for(size_t i = 1; i < barpath.size(); ++i){
-        cv::line(frame,barpath[i-1], barpath[i], cv::Scalar(255,255,0), 4);
+    for(size_t i = 1; i < barPath.size(); ++i){
+        cv::line(frame, barPath[i - 1], barPath[i], cv::Scalar(255, 255, 0), 4);
     }
-    cv::rectangle(frame, cv::Point(left, top), cv::Point(right,bottom), cv::Scalar(0,255,0), 3);
-
+    //cv::rectangle(frame, cv::Point(left, top), cv::Point(right,bottom), cv::Scalar(0,255,0), 3);
+    cv::rectangle(frame, box, cv::Scalar(0,255,0), 3);
+    /*
     cv::rectangle(frame, cv::Point(left, top - labelSize.height),
             cv::Point(left + labelSize.width,top + baseline),
             cv::Scalar::all(255), cv::FILLED);
 
-    cv::putText(frame, label, cv::Point(left, top), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar());
+    cv::putText(frame, label, cv::Point(left, top), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar());*/
 }
 /**
  * odstraneni vsech krome nejblizsi detekce

@@ -33,11 +33,13 @@ void VideoPlayer::loadFrames() {
     while (true) {
 
         videoCapture >> frame;
+
         if (frame.empty())
             break;
         else {
             scale = 640.0 / frame.size().height;
-            cv::resize(frame, frame, cv::Size(), scale, scale, CV_INTER_AREA);
+
+            cv::resize(frame, frame, cv::Size(), scale, scale, cv::INTER_AREA);
             //std::cout << frame.size().width << " x " << frame.size().height << std::endl;
             framesToProcess.push(frame.clone());
         }
@@ -49,12 +51,12 @@ VideoPlayer::VideoPlayer(const std::string &videoFile, const std::string &detect
     try{
         detector = DetectorFactory::createDetector(detectorFile); //vytvori tridu pro detektor v zavisloti na dodanem souboru
         videoCapture.open(videoFile);
-        fps = videoCapture.get(CV_CAP_PROP_FPS);
+        fps = videoCapture.get(cv::CAP_PROP_FPS);
     }catch(std::exception &e){
         throw e;
     }
     if(!videoCapture.isOpened()){
-        throw std::invalid_argument("Failed to open video file");
+        throw std::ios_base::failure("Failed to open video file");
     }
 }
 /**
@@ -81,7 +83,7 @@ void VideoPlayer::save(std::string &outName) {
         std::cerr << "Nothing to save" << std::endl;
         return;
     }
-    cv::VideoWriter videoWriter(outName+".avi", CV_FOURCC('M', 'J', 'P', 'G'),
+    cv::VideoWriter videoWriter(outName+".avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'),
             fps,cv::Size(processedFrames[0].size()));
     size_t cntr = 0;
     for(auto &frame : processedFrames){

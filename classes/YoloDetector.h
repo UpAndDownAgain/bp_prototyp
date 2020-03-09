@@ -13,6 +13,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/cvstd.hpp>
 #include <opencv2/core.hpp>
+#include <opencv2/tracking.hpp>
+
 //TODO
 class YoloDetector : public Detector {
 private:
@@ -20,10 +22,10 @@ private:
     double nmsThreshold = 0.4;
     cv::dnn::Net net;
     std::vector<cv::String> outNames;
-    std::vector<cv::Point> barpath;
+    std::vector<cv::Point> barPath;
 
     void postprocess(cv::Mat &frame, std::vector<cv::Mat> &vect);
-    void drawPred(int classId, float confidence, int left, int top, int right, int bottom, cv::Mat &frame);
+    void drawPred(int classId, float confidence, cv::Rect &box, /*int left, int top, int right, int bottom,*/ cv::Mat &frame);
     static void keepClosestDetection(std::vector<cv::Rect> &boxes, std::vector<int> &indices);
 
 public:
